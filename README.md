@@ -26,7 +26,7 @@
 
 # Usage
 ```bash
-glpt -f file
+gplt -f file
 ```
 
 # Cite

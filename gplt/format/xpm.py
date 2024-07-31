@@ -10,10 +10,11 @@ class XPMIO:
         self.title = ''
         self.xaxis = ''
         self.yaxis = ''
-        self.type = 'Continuous'
+        self.type = 'Continuous' # Continuous or Discrete 
         self.ncode = 1 # 1 or 2 chars of the level
         self.value_list = []
-        self.colors = {}  # code to value
+        self.code2value = {}  # code to value
+        self.hexcolors = [] # such as #FFFFFF
         self.dim = np.zeros(4, dtype=int) # data shape ncol + nrow + ncolors + ncode
         self.dt = 1  # time interval in ps
         # secondary structure and color rgb
@@ -59,20 +60,18 @@ class XPMIO:
                     for i in range(self.dim[2]):
                         temp = f.readline().rstrip('\n')
                         value = temp.split('"')[-2]
-                        if value=="Chain_Separator": 
+                        if value=="Chain_Separator": # use short name
                             value="Chain"
                         self.value_list.append(value)
-                        if 'Secondary' not in self.title:
-                            self.colors[temp[1:1+self.ncode]] = float(value) if 'Hydrogen' not in self.yaxis else 0 if value == 'None' else 1
-                        else:
-                            self.colors[temp[1:1+self.ncode]] = i
+                        self.code2value[temp[1:1+self.ncode]] = float(value) if self.type == 'Continuous' else i
+                        self.hexcolors.append(temp.split('"')[1].split()[-1])
                 elif 'x-axis:' in line:
                     self.xticks.extend(line.split()[2:-1])
                 elif 'y-axis:' in line:
                     self.yticks.extend(line.split()[2:-1])
                 elif line[0] == '"' and line[self.dim[0]*self.ncode + 1] == '"':
                     # reverse order data use insert
-                    self.data.insert(0, [self.colors[line[j:j+self.ncode]] 
+                    self.data.insert(0, [self.code2value[line[j:j+self.ncode]] 
                                       for j in range(1, self.dim[0]*self.ncode + 1, self.ncode)])
 
         # check dim
@@ -167,7 +166,7 @@ static char *gromacs_xpm[] = """
         # data use int to represent ss
         breverse = False
         if self.data.dtype == np.int32:
-            rev_colors = {v: k for k, v in self.colors.items()}
+            rev_colors = {v: k for k, v in self.code2value.items()}
             breverse = True
         codes = np.unique(np.array(self.data).flatten()) # unique codes
         self.dim[2] = len(codes)

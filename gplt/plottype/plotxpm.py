@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as set_colors
 import numpy as np
 
-
 class PlotXPM(XPMIO):
     """ @brief A class to plot xpm """
     def __init__(self, fname: list, *args, **kwargs) -> None:
@@ -68,26 +67,21 @@ class PlotXPM(XPMIO):
         X, Y = np.meshgrid(self.xticks, self.yticks)
         Z = np.array(self.data, dtype=float)
 
-        # hb xpm
-        if "Hydrogen" in self.yaxis:
-            h = plt.contourf(X, Y, Z, np.linspace(0, 1, 3), colors=['white', 'red'])
-            cb = plt.colorbar(h, orientation='horizontal', fraction=0.03)
-            cb.set_ticks([0.25, 0.75])
-            cb.set_ticklabels(['None', 'Present'])
-        # ss xpm
-        elif 'Secondary' in self.title:
+        # hb, ss xpm with Discrete data
+        if self.type == 'Discrete':
             # fix plot bug, we should use pcolormesh
-            cmap = set_colors.ListedColormap([self.color_map[i] for i in self.value_list])
-            boundaries = list(self.colors.values())
+            cmap = set_colors.ListedColormap(self.hexcolors)
+            boundaries = list(self.code2value.values())
             boundaries.append(len(boundaries))
             norm = set_colors.BoundaryNorm(boundaries, cmap.N)
             h = plt.pcolormesh(X, Y, Z, cmap=cmap, norm=norm, shading='nearest')
-            cb = plt.colorbar(h, orientation='horizontal')
+            fraction = 0.15 if len(self.hexcolors) > 3 else 0.03
+            cb = plt.colorbar(h, orientation='horizontal', fraction=fraction)
             cb.set_ticks(np.array(boundaries[:-1]) + 0.5)
             cb.set_ticklabels(self.value_list)
-        # other
+        # continuous data
         else:
-            h = plt.contourf(X, Y, Z, np.linspace(min(self.colors.values()), max(self.colors.values()), 9), cmap="jet")
+            h = plt.contourf(X, Y, Z, list(self.code2value.values()), cmap="jet")
             cb = plt.colorbar(h)
         if self._has_legend(): 
             cb.set_label(self.legend[0])
