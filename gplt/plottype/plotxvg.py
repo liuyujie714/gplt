@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+# coding: utf-8
 
 import matplotlib.pyplot as plt
 from typing import List

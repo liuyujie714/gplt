@@ -86,12 +86,19 @@ class XPMIO:
         self.yticks = np.asarray(self.yticks, dtype=np.float64)
         return self.data
     
-    def write(self, fout:str) -> None:
-        """ Write data to xmp file """
+    def write(self, fout:str = None, nbins:int = 51) -> None:
+        """ Write data to xmp file 
+        
+        Parameters
+        ----------
+        fout: the output filename, will use fname if fout is None to write
+        """
+        if fout is None:
+            fout = self.fname
         if fout.split('.')[-1] != 'xpm':
-            raise TypeError('Output file must be .xpm')
+            raise TypeError('Output file must be .xpm!')
         if len(self.data) == 0:
-            raise ValueError('Empty data')
+            raise ValueError('Empty data!')
         if not self._has_legend():
             self.legend = ['']
         
@@ -103,6 +110,58 @@ class XPMIO:
 /* y-label: "{}" */
 /* type:    "{}" */
 static char *gromacs_xpm[] = """
+
+        if 'Secondary' in self.title:
+            self.write_ss_xpm(fout, header)
+        else:
+            self.write_simple_xpm(fout, header, nbins)
+
+    def write_simple_xpm(self, fout:str, headerfmt:str, nbins:int):
+        """ @brief Write simple float xpm, such as densmap.xpm format """
+        # calculate dim from given self.data
+        self.dim[0], self.dim[1] = len(self.data[0]), len(self.data) # ncol * nrow
+        if nbins > 80:
+            raise ValueError('The nbins must be <= 80')
+        self.dim[2] = nbins # how many bins for diving data
+        self.dim[3] = 1 # only use one letter
+        single_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+{}|;:\',<.>/?'
+        fmin, fmax = np.min(self.data), np.max(self.data)
+        dx = (fmax-fmin)/(nbins-1)
+        codes = []
+        for i in range(nbins):
+            r = int(np.round(255 - (255 * i / (nbins-1))))
+            g = int(np.round(255 - (255 * i / (nbins-1))))
+            b = int(np.round(255 - (255 * i / (nbins-1))))
+            codes.append('#%02X%02X%02X' %(r, g, b))
+        #print(codes)
+
+        print(f'INFO) Write {fout}')
+        with open(fout, 'w') as w:
+            w.writelines(x for x in headerfmt 
+                         .format(self.title, self.legend[0], self.xaxis, self.yaxis, self.type)
+            )
+            w.write('{\n')
+            w.write('"%d %d   %d %d"\n' %(self.dim[0],self.dim[1],self.dim[2],self.dim[3]))
+            for idx, code in enumerate(codes):
+                w.write('"%c%c c %s " /* "%.3g" */,\n' % (
+                        single_chars[idx], ' ', code, fmin+dx*idx
+                        ))
+            # write x-axis
+            self._write_axis2(w, 'x', self.xticks)
+            # write y-axis
+            self._write_axis2(w, 'y', self.yticks)
+            # write data matrix in chars
+            for idx, i in enumerate(self.data[::-1, :]): # column reverse
+                w.write('"')
+                for j in i:
+                    w.write('%c' %(single_chars[int((j-fmin)/dx)]))
+                if idx < len(self.data)-1:
+                    w.write('",\n')
+                else:
+                    w.write('"\n')
+
+    def write_ss_xpm(self, fout:str, headerfmt:str):
+        """ @brief Write secondary structure of protein xpm"""
         # calculate dim from given self.data
         self.dim[0], self.dim[1] = len(self.data[0]), len(self.data) # ncol * nrow
         # data use int to represent ss
@@ -115,7 +174,7 @@ static char *gromacs_xpm[] = """
         self.dim[3] = 1 # one code
         print(f'INFO) Write {fout}')
         with open(fout, 'w') as w:
-            w.writelines(x for x in header 
+            w.writelines(x for x in headerfmt 
                          .format(self.title, self.legend[0], self.xaxis, self.yaxis, self.type)
             )
             w.write('{\n')
@@ -124,23 +183,14 @@ static char *gromacs_xpm[] = """
                 # "\"%c%c c #%02X%02X%02X \" /* \"%.3g\" */,\n" for simple
                 # "\"%c%c c #%02X%02X%02X \" /* \"%3d\" */,\n" for discrete
                 # "\"%c%c c #%02X%02X%02X \" /* \"%s\" */,\n" for string value in discrete
-                if breverse:
-                    ch = rev_colors[code]
-                    name = self.sscode_map[ch]
-                    cls = list(map(lambda x : np.int32(np.round(x*255)), self.color_map[name]))
-                    if name == 'Chain':
-                        name = 'Chain_Separator'
-                    w.write('"%c%c c #%02X%02X%02X " /* "%s" */,\n' %(
-                        ch, ' ', cls[0], cls[1], cls[2], name
-                    ))
-                else:
-                    name = self.sscode_map[code]
-                    cls = list(map(lambda x : np.int32(np.round(x*255)), self.color_map[name]))
-                    if name == 'Chain':
-                        name = 'Chain_Separator'
-                    w.write('"%c%c c #%02X%02X%02X " /* "%s" */,\n' %(
-                        code, ' ', cls[0], cls[1], cls[2], name
-                    ))
+                ch = rev_colors[code] if breverse else code
+                name = self.sscode_map[ch if breverse else code]
+                cls = list(map(lambda x: np.int32(np.round(x * 255)), self.color_map[name]))
+                if name == 'Chain':
+                    name = 'Chain_Separator'
+                w.write('"%c%c c #%02X%02X%02X " /* "%s" */,\n' % (
+                    ch, ' ', cls[0], cls[1], cls[2], name
+                ))
             # write x-aixs
             self._write_axis(w, 'x', self.dim[0], self.dt)
             # write y-axis
@@ -161,8 +211,20 @@ static char *gromacs_xpm[] = """
     def _has_legend(self) -> bool:
         """ @brief If has legend in xpm """
         return len(self.legend) > 0
+    
+    def _write_axis2(self, w:TextIOWrapper, axis:str, ticks:list):
+        """ @brief Write given ticks data to axis """
+        # write axis
+        for i, val in enumerate(ticks):
+            if i%80==0:
+                if i: 
+                    w.write('*/\n')
+                w.write('/* %s-axis:  ' %axis)
+            w.write('%g ' %val)
+        w.write('*/\n')
 
     def _write_axis(self, w:TextIOWrapper, axis:str, len:int, dt:float, started:int=0):
+        """ @brief  Write continuous data by given parameters"""
         # write axis
         for i in range(len):
             if i%80==0:

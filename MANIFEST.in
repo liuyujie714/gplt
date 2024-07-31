@@ -1,0 +1,6 @@
+recursive-include gplt * 
+recursive-exclude gplt/test/xpm * 
+recursive-exclude gplt/test/xvg * 
+recursive-exclude gplt/test/dat * 
+global-exclude *.py[co]
+include LICENSE

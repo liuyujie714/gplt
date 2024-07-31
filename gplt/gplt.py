@@ -1,4 +1,14 @@
-import argparse, sys
+#!/usr/bin/python3
+# coding: utf-8
+
+import sys, os
+
+# add path to syspath
+gpltpath = os.path.dirname(os.path.realpath(__file__))
+if gpltpath not in sys.path:
+    sys.path.insert(0, gpltpath)
+
+import argparse
 from plottype.plotxvg import PlotMultiXVG
 from plottype.plotxpm import PlotMultiXPM, PlotDat
 
@@ -41,15 +51,15 @@ def parser_opt():
 def gplt_command():
     opts = parser_opt()
     suffix = opts.file[0].split('.')[-1]
-    Func = {
+    func_call = {
         'xvg' : PlotMultiXVG,
         'xpm' : PlotMultiXPM,
         'dat' : PlotDat
     }
     try:
-        Func[suffix](opts.file, kwargs=opts._get_kwargs())
-    except KeyError:
-        raise Exception(f"Have not yet support format: '{suffix}'")
+        func_call[suffix](opts.file, kwargs=opts._get_kwargs())
+    except Exception as ex:
+        raise ex
     print('INFO) Have A Good Day!')
 
 if __name__ == '__main__':
