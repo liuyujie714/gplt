@@ -3,14 +3,22 @@
 
 from setuptools import setup, find_packages
 
+# Always update program version
 __version__ = '0.1.0'
 
+# Description
+long_doc = ""
+try:
+    with open('README.md', 'r', encoding='utf-8') as f:
+        long_doc = f.read()
+except:
+    pass
 
 setup(
     name='gplt',
     version=__version__,
     description='A program for plotting gromacs output data', 
-    long_description='',
+    long_description=long_doc,
     long_description_content_type='text/markdown',
     license='GPL',
     author='Yujie Liu',
