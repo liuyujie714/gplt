@@ -1,6 +1,6 @@
 # Description
 
-`gplt` is a very convenient python tool for plotting gromcas output file, such as `.xvg`, `.xpm` or convert `.dat` to `.xpm` for visualization. This tool is similar to [DuIvyTools](https://github.com/CharlesHahn/DuIvyTools), and these features could potentially be part of DuIvyTools. However, if time permits, I hope that it can become more powerful than DuIvyTools in the future.
+`gplt` is a very convenient python tool for plotting gromacs output file, such as `.xvg`, `.xpm` or convert `.dat` to `.xpm` for visualization. This tool is similar to [DuIvyTools](https://github.com/CharlesHahn/DuIvyTools), and these features could potentially be part of DuIvyTools. However, if time permits, I hope that it can become more powerful than DuIvyTools in the future.
 
 
 # Install

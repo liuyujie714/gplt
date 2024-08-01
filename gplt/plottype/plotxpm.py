@@ -16,6 +16,7 @@ class PlotXPM(XPMIO):
         self.kwargs = kwargs
         self.xlim = None
         self.ylim = None
+        self.mplstyle = None
 
         self.read() # read data
         self._set_display()   
@@ -46,10 +47,7 @@ class PlotXPM(XPMIO):
                     # set new xlabel use unit val
                     self.yaxis = self.yaxis.replace(ret, val)
 
-        keywords = ['legend', 'xaxis', 'yaxis', 'xlim', 'ylim']
-        # SS can not modify title
-        if 'Secondary' not in self.title:
-            keywords += ['title']
+        keywords = ['legend', 'xaxis', 'yaxis', 'xlim', 'ylim', 'title', 'mplstyle']
         for key, val in self.kwargs['kwargs']:
             if val != None and key in keywords:
                 setattr(self, key, val)
@@ -62,6 +60,8 @@ class PlotXPM(XPMIO):
                 'weight': 'regular',
                 'size'  : '14'}
         plt.rc('font', **font)
+        if self.mplstyle is not None:
+            plt.style.use(self.mplstyle)
 
         plt.figure('XPM Figure', figsize=(8, 6))
         X, Y = np.meshgrid(self.xticks, self.yticks)
@@ -99,7 +99,7 @@ class PlotXPM(XPMIO):
         for key, value in self.kwargs['kwargs']:
             if key == 'outfile' and value is not None:
                 print(f'INFO) Write {value}')
-                plt.savefig(value, dpi=600)
+                plt.savefig(value, dpi=600 if self.mplstyle is None else plt.rcParams['savefig.dpi'])
                 return
         plt.show()
 

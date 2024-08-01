@@ -42,6 +42,8 @@ def parser_opt():
                      help='The unit for x axis')
     gp3.add_argument('-uy', '--unity', type=str, default=None, 
                      help='The unit for y axis')
+    gp3.add_argument('-style', '--mplstyle', type=str, default=None, 
+                     help='The matplotlib style file for plotting')
 
     if len(sys.argv) < 3:
         args.print_help()

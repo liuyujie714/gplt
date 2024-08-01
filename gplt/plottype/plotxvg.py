@@ -14,6 +14,7 @@ class PlotXVG(XVGIO):
         self.kwargs = kwargs
         self.xlim = None
         self.ylim = None
+        self.mplstyle = None # matplotlib style
 
         self.read() # read data
         self._set_display()
@@ -43,7 +44,7 @@ class PlotXVG(XVGIO):
                     self.yaxis = self.yaxis.replace(ret, val)
 
         # only set label
-        keywords = ['legend', 'title', 'xaxis', 'yaxis', 'xlim', 'ylim']
+        keywords = ['legend', 'title', 'xaxis', 'yaxis', 'xlim', 'ylim', 'mplstyle']
         for key, val in self.kwargs['kwargs']:
             if val != None and key in keywords:
                 setattr(self, key, val)
@@ -82,6 +83,9 @@ class PlotMultiXVG():
                 'weight': 'regular',
                 'size'  : '14'}
         plt.rc('font', **font)
+        # set style if has mplstyle
+        if objs[0].mplstyle is not None:
+            plt.style.use(objs[0].mplstyle)
 
         # plot figure
         plt.figure('XVG Figure', figsize=(8,6))
@@ -108,6 +112,6 @@ class PlotMultiXVG():
         for key, value in self.kwargs['kwargs']:
             if key == 'outfile' and value is not None:
                 print(f'INFO) Write {value}')
-                plt.savefig(value, dpi=600)
+                plt.savefig(value, dpi=600 if objs[0].mplstyle is None else plt.rcParams['savefig.dpi'])
                 return
         plt.show()
