@@ -114,9 +114,13 @@ class PlotMultiXPM():
             obj = PlotXPM(f, kwargs=self.kwargs['kwargs'])
             obj.plot()
 
-class PlotDat(DAT2XPM):
-    def __init__(self, fname: list, *args, **kwargs) -> None:
-        super().__init__(fname[0])
+class MultiDAT2XPM():
+    """ @ batch convert dat to xpm files """
+    def __init__(self, fnames: list, *args, **kwargs) -> None:
+        self.fnames = fnames
+        self.batch()
     
-    def plot(self):
-        pass
+    def batch(self):
+        for f in self.fnames:
+            obj = DAT2XPM(f)
+            obj.to_xpm(51)

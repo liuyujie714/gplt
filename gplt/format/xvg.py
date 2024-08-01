@@ -54,16 +54,24 @@ class XVGIO:
         self.yaxis = XmgrDecode(self.yaxis).decoding()
         self.legend = XmgrDecode(self.legend).decoding()
     
-    def write(self, fout:str) -> None:
-        """ @brief Output data to fout file """
+    def write(self, fout:str, additions:str = None) -> None:
+        """ @brief Output data to fout file, if fout is None, will set to fname
+
+        Parameters
+        ----------
+        additions : str, addition context append file
+        """
+        if fout is None:
+            fout = self.fname
         header = """@ view 0.15, 0.15, 0.75, 0.85
 @ legend on
 @ legend box on
 @ legend loctype view
 @ legend 0.78, 0.8
 @ legend length 2\n"""
+        print(f'INFO) Write {fout}')
         with open(fout, 'w') as f:
-            f.write('# XVG written by glot\n')
+            f.write('# XVG written by gplt\n')
             f.write(f'@    title "{self.title}"\n')
             f.write(f'@    xaxis  label "{self.xaxis}"\n')
             f.write(f'@    yaxis  label "{self.yaxis}"\n')
@@ -77,6 +85,8 @@ class XVGIO:
                 else:
                     f.write('{:>10g}' .format(d))
                 f.write('\n')
+            if additions is not None:
+                f.write(additions)
 
     def _has_legend(self) -> bool:
         """ @brief If has legend in xvg """

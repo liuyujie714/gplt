@@ -10,11 +10,11 @@ if gpltpath not in sys.path:
 
 import argparse
 from plottype.plotxvg import PlotMultiXVG
-from plottype.plotxpm import PlotMultiXPM, PlotDat
+from plottype.plotxpm import PlotMultiXPM, MultiDAT2XPM
 
 def parser_opt():
     args = argparse.ArgumentParser(
-        description='A program for plotting groamcs data'
+        description='A program for plotting gromacs data'
     )
     gp1 = args.add_argument_group('Options to specify input files')
     gp1.add_argument('-f', '--file', type=str, default=None, nargs='*',
@@ -56,13 +56,13 @@ def gplt_command():
     func_call = {
         'xvg' : PlotMultiXVG,
         'xpm' : PlotMultiXPM,
-        'dat' : PlotDat
+        'dat' : MultiDAT2XPM
     }
     try:
         func_call[suffix](opts.file, kwargs=opts._get_kwargs())
     except Exception as ex:
         raise ex
-    print('INFO) Have A Good Day!')
+    print('INFO) Have A Nice Day!')
 
 if __name__ == '__main__':
     gplt_command()

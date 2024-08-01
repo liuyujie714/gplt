@@ -8,12 +8,12 @@ class DAT2XPM():
     """ @brief Convert dat to xpm file """
     def __init__(self, fdat:str) -> None:
         self.fdat = fdat
-        self.xpm = XPMIO('out.xpm')
-        self.to_xpm(51)
+        self.xpm = XPMIO(fdat.split('.')[0]+'.xpm')
 
     def to_xpm(self, nbins:int=51):
         """ @brief Read a .dat file and convert it to out.xpm file """
         # check .dat type
+        print(f'INFO) Loading {self.fdat}')
         with open(self.fdat, 'r') as f:
             line = f.readline()
         # is ss dat, such dssp.dat

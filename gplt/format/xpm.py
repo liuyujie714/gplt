@@ -3,6 +3,7 @@
 
 import numpy as np
 from io import TextIOWrapper
+from format.xvg import XVGIO
 
 class XPMIO:
     def __init__(self, fname:str) -> None:
@@ -86,11 +87,11 @@ class XPMIO:
         return self.data
     
     def write(self, fout:str = None, nbins:int = 51) -> None:
-        """ Write data to xmp file 
+        """ Write data to xpm file 
         
         Parameters
         ----------
-        fout: the output filename, will use fname if fout is None to write
+        fout: the output filename, will use fname prefix if fout is None to write
         """
         if fout is None:
             fout = self.fname
@@ -112,18 +113,19 @@ static char *gromacs_xpm[] = """
 
         if 'Secondary' in self.title:
             self.write_ss_xpm(fout, header)
+            self.write_ss_xvg()
         else:
             self.write_simple_xpm(fout, header, nbins)
 
     def write_simple_xpm(self, fout:str, headerfmt:str, nbins:int):
         """ @brief Write simple float xpm, such as densmap.xpm format """
+        single_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+{}|;:\',<.>/?'
         # calculate dim from given self.data
         self.dim[0], self.dim[1] = len(self.data[0]), len(self.data) # ncol * nrow
-        if nbins > 80:
-            raise ValueError('The nbins must be <= 80')
+        if nbins > len(single_chars):
+            raise ValueError(f'The nbins must be <= {len(single_chars)}')
         self.dim[2] = nbins # how many bins for diving data
         self.dim[3] = 1 # only use one letter
-        single_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+{}|;:\',<.>/?'
         fmin, fmax = np.min(self.data), np.max(self.data)
         dx = (fmax-fmin)/(nbins-1)
         codes = []
@@ -159,8 +161,26 @@ static char *gromacs_xpm[] = """
                 else:
                     w.write('"\n')
 
+    def write_ss_xvg(self):
+        """ @brief Write scount.xvg from .dat """
+        xvg = XVGIO("scount.xvg")
+        xvg.title = 'Secondary Structure'
+        xvg.xaxis = 'Frame'
+        xvg.yaxis = 'Number of Residues'
+        unique_codes = sorted(np.unique(self.data.flatten()), reverse=True)
+        xvg.legend = [self.sscode_map[k] for k in unique_codes]
+        xvg.data = np.zeros(shape=(self.data.shape[1], len(xvg.legend) + 1))
+        xvg.data[:, 0] = [x for x in range(self.data.shape[1])]
+        for fr in range(self.data.shape[1]):
+            for idx, s in enumerate(unique_codes, 1):
+                xvg.data[fr, idx] = np.count_nonzero(self.data[:, fr] == s)
+        counts = np.sum(xvg.data[:, 1:], axis=0, dtype=np.int32)
+        context =  '# Totals   ' + ''.join('{:>10d} ' .format(x) for x in counts) + '\n'
+        context += '# SS pr.   ' + ''.join('{:>10.2f} ' .format(x/np.sum(counts)) for x in counts) + '\n'
+        xvg.write(None, context)
+
     def write_ss_xpm(self, fout:str, headerfmt:str):
-        """ @brief Write secondary structure of protein xpm"""
+        """ @brief Write secondary structure of protein xpm, and count xvg"""
         # calculate dim from given self.data
         self.dim[0], self.dim[1] = len(self.data[0]), len(self.data) # ncol * nrow
         # data use int to represent ss
