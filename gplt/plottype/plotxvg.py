@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from typing import List
 from format.xvg import XVGIO
 from utils.units import get_unit_frac, get_unit_from_str
+from utils.logger import g_log
 
 class PlotXVG(XVGIO):
     """ @brief Plot xvg data """
@@ -111,7 +112,7 @@ class PlotMultiXVG():
         # save png
         for key, value in self.kwargs['kwargs']:
             if key == 'outfile' and value is not None:
-                print(f'INFO) Write {value}')
+                g_log.info(f'Write {value}')
                 plt.savefig(value, dpi=600 if objs[0].mplstyle is None else plt.rcParams['savefig.dpi'])
                 return
         plt.show()

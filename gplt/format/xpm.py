@@ -4,6 +4,7 @@
 import numpy as np
 from io import TextIOWrapper
 from format.xvg import XVGIO
+from utils.logger import g_log
 
 class XPMIO:
     def __init__(self, fname:str) -> None:
@@ -39,7 +40,7 @@ class XPMIO:
     
     def read(self) -> np.ndarray:
         """ @brief Read xpm file and return data """
-        print(f'INFO) Loading file: {self.fname}')
+        g_log.info(f'Loading file: {self.fname}')
         with open(self.fname, 'r') as f:
             while line:=f.readline().rstrip('\n'):
                 if len(line) < 2:
@@ -77,7 +78,7 @@ class XPMIO:
 
         # check dim
         if len(self.xticks) > self.dim[0]:
-            print('INFO) Process axis length to match array')
+            g_log.info('Process axis length to match array')
             self.xticks.pop()
             self.yticks.pop()
 
@@ -136,7 +137,7 @@ static char *gromacs_xpm[] = """
             codes.append('#%02X%02X%02X' %(r, g, b))
         #print(codes)
 
-        print(f'INFO) Write {fout}')
+        g_log.info(f'Write {fout}')
         with open(fout, 'w') as w:
             w.writelines(x for x in headerfmt 
                          .format(self.title, self.legend[0], self.xaxis, self.yaxis, self.type)
@@ -191,7 +192,7 @@ static char *gromacs_xpm[] = """
         codes = np.unique(np.array(self.data).flatten()) # unique codes
         self.dim[2] = len(codes)
         self.dim[3] = 1 # one code
-        print(f'INFO) Write {fout}')
+        g_log.info(f'Write {fout}')
         with open(fout, 'w') as w:
             w.writelines(x for x in headerfmt 
                          .format(self.title, self.legend[0], self.xaxis, self.yaxis, self.type)

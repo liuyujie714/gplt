@@ -4,6 +4,7 @@
 from format.xpm import XPMIO
 from format.dat import DAT2XPM
 from utils.units import get_unit_frac, get_unit_from_str
+from utils.logger import g_log
 import matplotlib.pyplot as plt
 import matplotlib.colors as set_colors
 import numpy as np
@@ -98,7 +99,7 @@ class PlotXPM(XPMIO):
         # save png
         for key, value in self.kwargs['kwargs']:
             if key == 'outfile' and value is not None:
-                print(f'INFO) Write {value}')
+                g_log.info(f'Write {value}')
                 plt.savefig(value, dpi=600 if self.mplstyle is None else plt.rcParams['savefig.dpi'])
                 return
         plt.show()

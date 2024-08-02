@@ -3,6 +3,7 @@
 
 import re
 import numpy as np
+from utils.logger import g_log
 from .xmgrdecode import XmgrDecode
 
 class XVGIO:
@@ -18,7 +19,7 @@ class XVGIO:
         """ @brief Read xvg data and return multi-columns data in array """
         self._read_header()
         data = []
-        print(f'INFO) Loading file: {self.fname}')
+        g_log.info(f'Loading file: {self.fname}')
         with open(self.fname, 'r') as f:
             lines = f.readlines()
             for line in lines:
@@ -69,7 +70,7 @@ class XVGIO:
 @ legend loctype view
 @ legend 0.78, 0.8
 @ legend length 2\n"""
-        print(f'INFO) Write {fout}')
+        g_log.info(f'Write {fout}')
         with open(fout, 'w') as f:
             f.write('# XVG written by gplt\n')
             f.write(f'@    title "{self.title}"\n')

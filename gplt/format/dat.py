@@ -3,6 +3,7 @@
 
 import numpy as np
 from format.xpm import XPMIO
+from utils.logger import g_log
 
 class DAT2XPM():
     """ @brief Convert dat to xpm file """
@@ -13,7 +14,7 @@ class DAT2XPM():
     def to_xpm(self, nbins:int=51):
         """ @brief Read a .dat file and convert it to out.xpm file """
         # check .dat type
-        print(f'INFO) Loading {self.fdat}')
+        g_log.info(f'Loading {self.fdat}')
         with open(self.fdat, 'r') as f:
             line = f.readline()
         # is ss dat, such dssp.dat

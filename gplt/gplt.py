@@ -2,6 +2,8 @@
 # coding: utf-8
 
 import sys, os
+from utils.coolstuff import CoolStuff
+from utils.logger import g_log
 
 # add path to syspath
 gpltpath = os.path.dirname(os.path.realpath(__file__))
@@ -62,7 +64,7 @@ def gplt_command():
         func_call[suffix](opts.file, kwargs=opts._get_kwargs())
     except Exception as ex:
         raise ex
-    print('INFO) Have A Nice Day!')
+    g_log.info('gplt reminds you: ' + CoolStuff().print_choice())
 
 if __name__ == '__main__':
     gplt_command()
