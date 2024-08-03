@@ -37,6 +37,12 @@ def parser_opt():
                       help='Set limits of xaxis')
     gp3.add_argument('-ylim', '--ylim', type=float, default=None, nargs=2,
                       help='Set limits of yaxis')
+    gp3.add_argument('-xprec', '--xprec', type=int, default=None,
+                      help='Set the precision of xtick')
+    gp3.add_argument('-yprec', '--yprec', type=int, default=None,
+                      help='Set the precision of ytick')
+    gp3.add_argument('-zprec', '--zprec', type=int, default=None,
+                      help='Set the precision of ztick if available')
     gp3.add_argument('-xaxis', '--xaxis', type=str, default=None,
                       help='Set X axis label')
     gp3.add_argument('-yaxis', '--yaxis', type=str, default=None,
@@ -47,6 +53,9 @@ def parser_opt():
                      help='The unit for y axis')
     gp3.add_argument('-style', '--mplstyle', type=str, default=None, 
                      help='The matplotlib style file for plotting')
+    gp3.add_argument('-u', '--using', type=str, default=None, 
+                     help='Use the selection columns to plot. 1-3 represents 1,2,3 column, 1,2 represent 1 and 2 column. ' \
+                     '1,2:2 represents 1 and 2 column for file 1, 2 column for file2, ...(: represents multi-files)'  )
 
     if len(sys.argv) < 3:
         args.print_help()
@@ -65,7 +74,7 @@ def gplt_command():
         func_call[suffix](opts.file, kwargs=opts._get_kwargs())
     except KeyError:
         g_log.error(f'Have not yet support "{suffix}" format')
-    g_log.info('gplt reminds you: ' + CoolStuff().print_choice())
+    g_log.info('GPLT reminds you: ' + CoolStuff().print_choice())
 
 if __name__ == '__main__':
     gplt_command()

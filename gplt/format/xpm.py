@@ -5,9 +5,11 @@ import numpy as np
 from io import TextIOWrapper
 from format.xvg import XVGIO
 from utils.logger import g_log
+from utils.utils import check_file_exist
 
 class XPMIO:
     def __init__(self, fname:str) -> None:
+        check_file_exist(fname)
         self.fname = fname
         self.title = ''
         self.xaxis = ''
@@ -42,7 +44,8 @@ class XPMIO:
         """ @brief Read xpm file and return data """
         g_log.info(f'Loading file: {self.fname}')
         with open(self.fname, 'r') as f:
-            while line:=f.readline().rstrip('\n'):
+            while line:=f.readline():
+                line = line.rstrip('\n')
                 if len(line) < 2:
                     continue
                 if 'title:' in line:
@@ -78,7 +81,7 @@ class XPMIO:
 
         # check dim
         if len(self.xticks) > self.dim[0]:
-            g_log.info('Process axis length to match array')
+            g_log.warn('Process axis length to match array')
             self.xticks.pop()
             self.yticks.pop()
 

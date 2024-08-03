@@ -2,6 +2,7 @@
 # coding: utf-8
 
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FormatStrFormatter
 from typing import List
 from format.xvg import XVGIO
 from utils.units import get_unit_frac, get_unit_from_str
@@ -15,6 +16,9 @@ class PlotXVG(XVGIO):
         self.kwargs = kwargs
         self.xlim = None
         self.ylim = None
+        self.xprec = None
+        self.yprec = None
+        self.using = None #  use fixed columns to plot
         self.mplstyle = None # matplotlib style
 
         self.read() # read data
@@ -45,12 +49,13 @@ class PlotXVG(XVGIO):
                     self.yaxis = self.yaxis.replace(ret, val)
 
         # only set label
-        keywords = ['legend', 'title', 'xaxis', 'yaxis', 'xlim', 'ylim', 'mplstyle']
+        keywords = ['legend', 'title', 'xaxis', 'yaxis', 'xlim', 'ylim', 'mplstyle',
+                    'xprec', 'yprec', 'using']
         for key, val in self.kwargs['kwargs']:
             if val != None and key in keywords:
-                setattr(self, key, val)
+                setattr(self, key, val) # self.key = val
 
-    def plot(self):
+    def _plot(self):
         """ @brief Plot figure """
         plt.figure(figsize=(8,6))
         plt.plot(self.data[:, 0], self.data[:, 1:])
@@ -74,6 +79,36 @@ class PlotMultiXVG():
         self.kwargs = kwargs
         self.mplot()
 
+    def parser_using(self, string:str):
+        """ @brief parser input '-u' option from command 
+
+        Parameters
+        ----------
+        string: input string, such as 1,2:3:4
+
+        Return
+        ------
+        return None if string is empty list [], else return a list that includes these columns to ploting,
+        """ 
+        if string is None:
+            return []
+        groups = string.split(':')
+        if len(groups) != len(self.fnames):
+            g_log.error(f'The number of grous ({len(groups)}) from -u is not equal to total input files ({len(self.fnames)})')
+        plist = []
+        for g in groups:
+            g1 = []
+            # 1-3 
+            if len(g.split(',')) >= 1 :
+                for j in g.split(','):
+                    sp = j.split('-')
+                    if len(sp) == 1:
+                        g1.extend([int(sp[0])])
+                    else:
+                        g1.extend([x for x in range(int(sp[0]), int(sp[1])+1)])
+            plist.append(sorted(list(set(g1))))
+        return plist
+
     def mplot(self):
         objs: List[PlotXVG] = []
         for f in self.fnames:
@@ -89,26 +124,48 @@ class PlotMultiXVG():
             plt.style.use(objs[0].mplstyle)
 
         # plot figure
-        plt.figure('XVG Figure', figsize=(8,6))
+        fig, ax = plt.subplots(figsize=(8,6))
+        fig.canvas.manager.set_window_title('XVG Figure')
         legs = []
         is_custom_leg = any(key == 'legend' and value is not None for key, value in self.kwargs['kwargs'])
+
+        # parser -using
+        #print('input: ', objs[0].using) 
+        grps = self.parser_using(objs[0].using)
+        if len(grps) > 0:
+            xcol = grps[0][0] - 1
+            if xcol < 0:
+                g_log.error('Input -u must b > 1')
+            grps[0] = grps[0][1:] # drop the first column
+
         for idx, obj in enumerate(objs):
-            plt.plot(obj.data[:, 0], obj.data[:, 1:])
+            if len(grps) > 0:
+                for g in range(len(grps[idx])):
+                    plt.plot(obj.data[:, xcol], obj.data[:, grps[idx][g]-1])
+            else:
+                plt.plot(obj.data[:, 0], obj.data[:, 1:])
             # merge legends
             if not is_custom_leg and len(self.fnames)>1:
                 legs.extend([f'{x} of {self.fnames[idx]}' for x in obj.legend])
             else:
                 legs = obj.legend
 
-        plt.legend(legs, frameon=False)
-        plt.xlabel(objs[0].xaxis)
-        plt.ylabel(objs[0].yaxis)
-        plt.title(objs[0].title)
+        ax.legend(legs, frameon=False)
+        ax.set_xlabel(objs[0].xaxis)
+        ax.set_ylabel(objs[0].yaxis)
+        ax.set_title(objs[0].title)
         # set range of axis
         if objs[0].xlim != None:
-            plt.xlim(objs[0].xlim)
+            ax.set_xlim(objs[0].xlim)
         if objs[0].ylim != None:
-            plt.ylim(objs[0].ylim)
+            ax.set_ylim(objs[0].ylim)
+
+        # set precision of ticks
+        if objs[0].xprec is not None:
+            ax.xaxis.set_major_formatter(FormatStrFormatter(f'%.{objs[0].xprec}f'))
+        if objs[0].yprec is not None:
+            ax.yaxis.set_major_formatter(FormatStrFormatter(f'%.{objs[0].yprec}f'))
+
         # save png
         for key, value in self.kwargs['kwargs']:
             if key == 'outfile' and value is not None:

@@ -4,10 +4,12 @@
 import numpy as np
 from format.xpm import XPMIO
 from utils.logger import g_log
+from utils.utils import check_file_exist
 
 class DAT2XPM():
     """ @brief Convert dat to xpm file """
     def __init__(self, fdat:str) -> None:
+        check_file_exist(fdat)
         self.fdat = fdat
         self.xpm = XPMIO(fdat.split('.')[0]+'.xpm')
 

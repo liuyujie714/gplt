@@ -7,6 +7,7 @@ from utils.units import get_unit_frac, get_unit_from_str
 from utils.logger import g_log
 import matplotlib.pyplot as plt
 import matplotlib.colors as set_colors
+from matplotlib.ticker import FormatStrFormatter
 import numpy as np
 
 class PlotXPM(XPMIO):
@@ -17,6 +18,9 @@ class PlotXPM(XPMIO):
         self.kwargs = kwargs
         self.xlim = None
         self.ylim = None
+        self.xprec = None
+        self.yprec = None
+        self.zprec = None
         self.mplstyle = None
 
         self.read() # read data
@@ -48,7 +52,8 @@ class PlotXPM(XPMIO):
                     # set new xlabel use unit val
                     self.yaxis = self.yaxis.replace(ret, val)
 
-        keywords = ['legend', 'xaxis', 'yaxis', 'xlim', 'ylim', 'title', 'mplstyle']
+        keywords = ['legend', 'xaxis', 'yaxis', 'xlim', 'ylim', 'title', 'mplstyle', 
+                    'xprec', 'yprec', 'zprec']
         for key, val in self.kwargs['kwargs']:
             if val != None and key in keywords:
                 setattr(self, key, val)
@@ -64,7 +69,8 @@ class PlotXPM(XPMIO):
         if self.mplstyle is not None:
             plt.style.use(self.mplstyle)
 
-        plt.figure('XPM Figure', figsize=(8, 6))
+        fig, ax = plt.subplots(figsize=(8,6))
+        fig.canvas.manager.set_window_title('XPM Figure')
         X, Y = np.meshgrid(self.xticks, self.yticks)
         Z = np.array(self.data, dtype=float)
 
@@ -87,14 +93,23 @@ class PlotXPM(XPMIO):
         if self._has_legend(): 
             cb.set_label(self.legend[0])
 
-        plt.xlabel(self.xaxis)
-        plt.ylabel(self.yaxis)
-        plt.title(self.title)
+        ax.set_xlabel(self.xaxis)
+        ax.set_ylabel(self.yaxis)
+        ax.set_title(self.title)
         # set range
-        if self.xlim != None:
-            plt.xlim(self.xlim)
-        if self.ylim != None:
-            plt.ylim(self.ylim)
+        if self.xlim is not None:
+            ax.set_xlim(self.xlim)
+        if self.ylim is not None:
+            ax.set_ylim(self.ylim)
+        
+        # set precision of ticks
+        if self.xprec is not None:
+            ax.xaxis.set_major_formatter(FormatStrFormatter(f'%.{self.xprec}f'))
+        if self.yprec is not None:
+            ax.yaxis.set_major_formatter(FormatStrFormatter(f'%.{self.yprec}f'))
+        if self.zprec is not None:
+            cb.formatter = FormatStrFormatter(f'%.{self.zprec}f')
+            cb.update_ticks()
 
         # save png
         for key, value in self.kwargs['kwargs']:

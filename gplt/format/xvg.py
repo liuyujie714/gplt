@@ -1,13 +1,15 @@
 #!/usr/bin/python3
 # coding: utf-8
 
-import re
+import re, os
 import numpy as np
 from utils.logger import g_log
+from utils.utils import check_file_exist
 from .xmgrdecode import XmgrDecode
 
 class XVGIO:
     def __init__(self, fname:str) -> None:
+        check_file_exist(fname)
         self.fname = fname
         self.title = ''
         self.xaxis = ''
