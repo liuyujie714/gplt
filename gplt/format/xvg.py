@@ -26,7 +26,7 @@ class XVGIO:
                 if len(line.strip()) < 1 or line.startswith('@') or line.startswith('#'):
                     continue
                 if line.startswith('&'):
-                    raise IOError('Have not yet support multi-sets xvg')
+                    g_log.error('Have not yet support multi-sets xvg')
                 data.append(list(map(float, line.strip().split())))
         self.data = np.array(data)
         return self.data

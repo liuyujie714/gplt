@@ -3,11 +3,12 @@
 
 import logging, sys, time
 import inspect
-from termcolor import colored
+import colorama as clr
 
 class Logger:
     """ @brief A logger class, use g_log in any source file """
     def __init__(self) -> None:
+        clr.init(autoreset=True) # inital colorama
         logging.basicConfig(
             format='%(message)s',
             level=logging.INFO
@@ -23,24 +24,22 @@ class Logger:
     @staticmethod
     def caller_info():
         """ @brief get caller source filename and line number"""
-        frame = inspect.stack()[2]  # 调用方是栈的第三个元素
-        module = inspect.getmodule(frame[0])
-        filename = module.__file__ if module else "unknown"
-        lineno = frame.lineno
-        return f'in {filename} (line {lineno})'
+        frame = inspect.stack()[2]
+        return f' <- source file: {frame.filename} (line {frame.lineno})'
     
     def debug(self, msg):
-        self.logger.debug(colored(f'{self.curr_time()}\nDEBUG) {msg} {self.caller_info()}', 'blue'))
+        self.logger.debug(clr.Fore.BLUE + f'{self.curr_time()}\nDEBUG) {msg} {self.caller_info()}')
 
     def info(self, msg):
-        self.logger.info(colored(f'{self.curr_time()}\nINFO) {msg}', 'yellow'))
+        self.logger.info(clr.Fore.YELLOW + f'{self.curr_time()}\nINFO) {msg}')
 
     def error(self, msg):
-        self.logger.error(colored(f'{self.curr_time()}\nERROR) {msg} {self.caller_info()}', 'red', 'on_yellow'))
+        self.logger.error(clr.Fore.RED + clr.Back.YELLOW + f'{self.curr_time()}\nERROR) {msg} {self.caller_info()}')
         sys.exit(1)
 
     def critical(self, msg):
-        self.logger.critical(colored(f'{self.curr_time()}\nCRITICAL) {msg} {self.caller_info()}', 'red', 'on_white', ['bold']))
+        self.logger.critical(clr.Fore.RED + clr.Back.WHITE + f'{self.curr_time()}\nCRITICAL) {msg} {self.caller_info()}')
         sys.exit(2)    
 
 g_log = Logger() # the golbal handle of singleton
+

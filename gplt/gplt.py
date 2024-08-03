@@ -2,15 +2,16 @@
 # coding: utf-8
 
 import sys, os
-from utils.coolstuff import CoolStuff
-from utils.logger import g_log
 
 # add path to syspath
 gpltpath = os.path.dirname(os.path.realpath(__file__))
 if gpltpath not in sys.path:
     sys.path.insert(0, gpltpath)
 
+
 import argparse
+from utils.coolstuff import CoolStuff
+from utils.logger import g_log
 from plottype.plotxvg import PlotMultiXVG
 from plottype.plotxpm import PlotMultiXPM, MultiDAT2XPM
 
@@ -49,7 +50,7 @@ def parser_opt():
 
     if len(sys.argv) < 3:
         args.print_help()
-        args.exit('Error! Missing input options')
+        g_log.error('Missing input options')
     return args.parse_args()
 
 def gplt_command():
@@ -62,8 +63,8 @@ def gplt_command():
     }
     try:
         func_call[suffix](opts.file, kwargs=opts._get_kwargs())
-    except Exception as ex:
-        raise ex
+    except KeyError:
+        g_log.error(f'Have not yet support "{suffix}" format')
     g_log.info('gplt reminds you: ' + CoolStuff().print_choice())
 
 if __name__ == '__main__':

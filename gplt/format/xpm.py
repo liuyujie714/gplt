@@ -97,9 +97,9 @@ class XPMIO:
         if fout is None:
             fout = self.fname
         if fout.split('.')[-1] != 'xpm':
-            raise TypeError('Output file must be .xpm!')
+            g_log.error('Output file must be .xpm!')
         if len(self.data) == 0:
-            raise ValueError('Empty data!')
+            g_log.error('Empty data!')
         if not self._has_legend():
             self.legend = ['']
         
@@ -124,7 +124,7 @@ static char *gromacs_xpm[] = """
         # calculate dim from given self.data
         self.dim[0], self.dim[1] = len(self.data[0]), len(self.data) # ncol * nrow
         if nbins > len(single_chars):
-            raise ValueError(f'The nbins must be <= {len(single_chars)}')
+            g_log.error(f'The nbins must be <= {len(single_chars)}')
         self.dim[2] = nbins # how many bins for diving data
         self.dim[3] = 1 # only use one letter
         fmin, fmax = np.min(self.data), np.max(self.data)
