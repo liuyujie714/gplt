@@ -71,9 +71,7 @@ def gplt_command():
         'dat' : MultiDAT2XPM
     }
     try:
-        func_call[suffix](opts.file, kwargs=opts._get_kwargs())
-    except KeyError:
-        g_log.error(f'Have not yet support "{suffix}" format')
+        func_call[suffix](opts.file, kwargs=vars(opts))
     except Exception as ex:
         g_log.error(f'error msg: {ex}')
     g_log.info('GPLT reminds you: ' + CoolStuff().print_choice())

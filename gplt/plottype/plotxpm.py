@@ -12,9 +12,8 @@ import numpy as np
 
 class PlotXPM(XPMIO):
     """ @brief A class to plot xpm """
-    def __init__(self, fname: list, *args, **kwargs) -> None:
+    def __init__(self, fname: list, **kwargs) -> None:
         super().__init__(fname)
-        self.args = args
         self.kwargs = kwargs
         self.xlim = None
         self.ylim = None
@@ -32,7 +31,7 @@ class PlotXPM(XPMIO):
 
         """ @brief Set up figure display, such label, title, legend, ... """
         # adjust unit of axis
-        for key, val in self.kwargs['kwargs']:
+        for key, val in self.kwargs.items():
             if val is None:
                 continue
             if key=='unitx':
@@ -54,7 +53,7 @@ class PlotXPM(XPMIO):
 
         keywords = ['legend', 'xaxis', 'yaxis', 'xlim', 'ylim', 'title', 'mplstyle', 
                     'xprec', 'yprec', 'zprec']
-        for key, val in self.kwargs['kwargs']:
+        for key, val in self.kwargs.items():
             if val != None and key in keywords:
                 setattr(self, key, val)
 
@@ -112,27 +111,27 @@ class PlotXPM(XPMIO):
             cb.update_ticks()
 
         # save png
-        for key, value in self.kwargs['kwargs']:
-            if key == 'outfile' and value is not None:
-                g_log.info(f'Write {value}')
-                plt.savefig(value, dpi=600 if self.mplstyle is None else plt.rcParams['savefig.dpi'])
-                return
-        plt.show()
+        fout = self.kwargs['outfile']
+        if fout is not None:
+            g_log.info(f'Write {fout}')
+            plt.savefig(fout, dpi=600 if self.mplstyle is None else plt.rcParams['savefig.dpi'])
+        else:
+            plt.show()
 
 class PlotMultiXPM():
-    def __init__(self, fnames: list, *args, **kwargs) -> None:
+    def __init__(self, fnames: list, **kwargs) -> None:
         self.fnames = fnames
-        self.kwargs = kwargs
+        self.kwargs = kwargs['kwargs']
         self.mplot()
 
     def mplot(self):
         for f in self.fnames:
-            obj = PlotXPM(f, kwargs=self.kwargs['kwargs'])
+            obj = PlotXPM(f, **self.kwargs)
             obj.plot()
 
 class MultiDAT2XPM():
     """ @ batch convert dat to xpm files """
-    def __init__(self, fnames: list, *args, **kwargs) -> None:
+    def __init__(self, fnames: list, **kwargs) -> None:
         self.fnames = fnames
         self.batch()
     

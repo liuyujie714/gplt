@@ -12,9 +12,8 @@ import numpy as np
 
 class PlotXVG(XVGIO):
     """ @brief Plot xvg data """
-    def __init__(self, fname: str, *args, **kwargs) -> None:
+    def __init__(self, fname: str, **kwargs) -> None:
         super().__init__(fname)
-        self.args = args
         self.kwargs = kwargs
         self.xlim = None
         self.ylim = None
@@ -30,7 +29,7 @@ class PlotXVG(XVGIO):
     def _set_display(self):
         """ @brief Set up figure display, such label, title, legend, ... """
         # adjust unit of axis
-        for key, val in self.kwargs['kwargs']:
+        for key, val in self.kwargs.items():
             if val is None:
                 continue
             if key=='unitx':
@@ -53,7 +52,7 @@ class PlotXVG(XVGIO):
         # only set label
         keywords = ['legend', 'title', 'xaxis', 'yaxis', 'xlim', 'ylim', 'mplstyle',
                     'xprec', 'yprec', 'using']
-        for key, val in self.kwargs['kwargs']:
+        for key, val in self.kwargs.items():
             if val != None and key in keywords:
                 setattr(self, key, val) # self.key = val
 
@@ -75,10 +74,9 @@ class PlotXVG(XVGIO):
 
 class PlotMultiXVG():
     """ @brief Plot mulit-files xvg """
-    def __init__(self, fnames: list, *args, **kwargs) -> None:
+    def __init__(self, fnames: list, **kwargs) -> None:
         self.fnames = fnames
-        self.args = args
-        self.kwargs = kwargs
+        self.kwargs = kwargs['kwargs']
         self.mplot()
 
     def parser_using(self, string:str):
@@ -112,9 +110,10 @@ class PlotMultiXVG():
         return plist
 
     def mplot(self):
+        """ @brief Plot Multi-sets on one figure """
         objs: List[PlotXVG] = []
         for f in self.fnames:
-            objs.append(PlotXVG(f, kwargs=self.kwargs['kwargs']))
+            objs.append(PlotXVG(f, **self.kwargs))
 
         # set font
         font = {'family': 'Times New Roman',
@@ -129,8 +128,7 @@ class PlotMultiXVG():
         fig, ax = plt.subplots(figsize=(8,6))
         fig.canvas.manager.set_window_title('XVG Figure')
         legs = []
-        is_custom_leg = any(key == 'legend' and value is not None for key, value in self.kwargs['kwargs'])
-
+        
         # parser -using
         #print('input: ', objs[0].using) 
         grps = self.parser_using(objs[0].using)
@@ -147,15 +145,17 @@ class PlotMultiXVG():
             else:
                 plt.plot(obj.data[:, 0], obj.data[:, 1:])
             # merge legends
-            if not is_custom_leg and len(self.fnames)>1:
+            if (self.kwargs['legend'] is None) and len(self.fnames)>1:
                 legs.extend([f'{x} of {self.fnames[idx]}' for x in obj.legend])
             else:
                 legs = obj.legend
 
+        # set show
         ax.legend(legs, frameon=False)
         ax.set_xlabel(objs[0].xaxis)
         ax.set_ylabel(objs[0].yaxis)
         ax.set_title(objs[0].title)
+        
         # set range of axis
         if objs[0].xlim != None:
             ax.set_xlim(objs[0].xlim)
@@ -168,19 +168,21 @@ class PlotMultiXVG():
         if objs[0].yprec is not None:
             ax.yaxis.set_major_formatter(FormatStrFormatter(f'%.{objs[0].yprec}f'))
 
-        # save png
-        for key, value in self.kwargs['kwargs']:
-            if key == 'outfile' and value is not None:
-                g_log.info(f'Write {value}')
-                # write excel table
-                if '.xlsx' in value:
-                    mergedata = [objs[0].data[:, 0]] # x axis
-                    # all y axises
-                    for obj in objs:
-                        mergedata.extend(obj.data[:, col] for col in range(1, obj.data[:, 1:].shape[1] + 1))
-                    df = pd.DataFrame(np.array(mergedata).T, columns=[objs[0].xaxis] + legs)
-                    df.to_excel(value, index=False)
-                else:
-                    plt.savefig(value, dpi=600 if objs[0].mplstyle is None else plt.rcParams['savefig.dpi'])
-                return
-        plt.show()
+        # save png or plot
+        fout = self.kwargs['outfile']
+        if fout is not None:
+            g_log.info(f'Write {fout}')
+            # write excel table
+            if '.xlsx' in fout:
+                mergedata = [objs[0].data[:, 0]] # x axis
+                # all y axises
+                for obj in objs:
+                    mergedata.extend(obj.data[:, col] for col in range(1, obj.data[:, 1:].shape[1] + 1))
+                cols = [objs[0].xaxis] + legs
+                cols = [cols[i].replace('$', '') for i in range(len(cols))] # remove latex
+                df = pd.DataFrame(np.array(mergedata).T, columns=cols)
+                df.to_excel(fout, index=False)
+            else:
+                plt.savefig(fout, dpi=600 if objs[0].mplstyle is None else plt.rcParams['savefig.dpi'])
+        else:
+            plt.show()
