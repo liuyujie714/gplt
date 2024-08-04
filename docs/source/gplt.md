@@ -123,4 +123,4 @@ gplt -f dssp.dat && gplt -f dssp.xpm && gplt -f scount.xvg
 # Cite
 If `gplt` is utilized in your work, please cite as follows in main text:
 
-> Yujie Liu, gplt, Version [xxx](), https://pypi.org/project/gplt/
+> Yujie Liu, gplt (v0.1.12). Zenodo. https://doi.org/10.5281/zenodo.13208831
