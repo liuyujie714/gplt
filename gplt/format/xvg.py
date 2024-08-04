@@ -9,7 +9,6 @@ from .xmgrdecode import XmgrDecode
 
 class XVGIO:
     def __init__(self, fname:str) -> None:
-        check_file_exist(fname)
         self.fname = fname
         self.title = ''
         self.xaxis = ''
@@ -21,6 +20,7 @@ class XVGIO:
         """ @brief Read xvg data and return multi-columns data in array """
         self._read_header()
         data = []
+        check_file_exist(self.fname)
         g_log.info(f'Loading file: {self.fname}')
         with open(self.fname, 'r') as f:
             lines = f.readlines()

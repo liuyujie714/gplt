@@ -4,7 +4,7 @@
 from setuptools import setup, find_packages
 
 # Always update program version
-__version__ = '0.1.10'
+__version__ = '0.1.12.4'
 
 # Description
 long_doc = ""
@@ -24,7 +24,7 @@ setup(
     author='Yujie Liu',
     author_email='',
     python_requires='>=3.8',
-    install_requires=['typing_extensions', 'numpy', 'matplotlib'],
+    install_requires=['typing_extensions', 'numpy', 'matplotlib', 'colorama', 'pandas'],
     exclude=['setup.py'],
     packages=find_packages(include=['gplt', 'gplt.*']),
     entry_points={"console_scripts": ["gplt = gplt.gplt:gplt_command"]},

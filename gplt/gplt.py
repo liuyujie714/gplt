@@ -74,6 +74,8 @@ def gplt_command():
         func_call[suffix](opts.file, kwargs=opts._get_kwargs())
     except KeyError:
         g_log.error(f'Have not yet support "{suffix}" format')
+    except Exception as ex:
+        g_log.error(f'error msg: {ex}')
     g_log.info('GPLT reminds you: ' + CoolStuff().print_choice())
 
 if __name__ == '__main__':

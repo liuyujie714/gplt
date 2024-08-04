@@ -7,6 +7,8 @@ from typing import List
 from format.xvg import XVGIO
 from utils.units import get_unit_frac, get_unit_from_str
 from utils.logger import g_log
+import pandas as pd
+import numpy as np
 
 class PlotXVG(XVGIO):
     """ @brief Plot xvg data """
@@ -170,6 +172,15 @@ class PlotMultiXVG():
         for key, value in self.kwargs['kwargs']:
             if key == 'outfile' and value is not None:
                 g_log.info(f'Write {value}')
-                plt.savefig(value, dpi=600 if objs[0].mplstyle is None else plt.rcParams['savefig.dpi'])
+                # write excel table
+                if '.xlsx' in value:
+                    mergedata = [objs[0].data[:, 0]] # x axis
+                    # all y axises
+                    for obj in objs:
+                        mergedata.extend(obj.data[:, col] for col in range(1, obj.data[:, 1:].shape[1] + 1))
+                    df = pd.DataFrame(np.array(mergedata).T, columns=[objs[0].xaxis] + legs)
+                    df.to_excel(value, index=False)
+                else:
+                    plt.savefig(value, dpi=600 if objs[0].mplstyle is None else plt.rcParams['savefig.dpi'])
                 return
         plt.show()

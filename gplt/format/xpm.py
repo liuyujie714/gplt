@@ -9,7 +9,6 @@ from utils.utils import check_file_exist
 
 class XPMIO:
     def __init__(self, fname:str) -> None:
-        check_file_exist(fname)
         self.fname = fname
         self.title = ''
         self.xaxis = ''
@@ -42,6 +41,7 @@ class XPMIO:
     
     def read(self) -> np.ndarray:
         """ @brief Read xpm file and return data """
+        check_file_exist(self.fname)
         g_log.info(f'Loading file: {self.fname}')
         with open(self.fname, 'r') as f:
             while line:=f.readline():

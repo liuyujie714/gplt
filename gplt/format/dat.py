@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # coding: utf-8
 
+import os
 import numpy as np
 from format.xpm import XPMIO
 from utils.logger import g_log
@@ -11,7 +12,7 @@ class DAT2XPM():
     def __init__(self, fdat:str) -> None:
         check_file_exist(fdat)
         self.fdat = fdat
-        self.xpm = XPMIO(fdat.split('.')[0]+'.xpm')
+        self.xpm = XPMIO(os.path.basename(fdat).split('.dat')[0]+'.xpm')
 
     def to_xpm(self, nbins:int=51):
         """ @brief Read a .dat file and convert it to out.xpm file """
