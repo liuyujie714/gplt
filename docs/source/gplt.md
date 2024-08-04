@@ -16,14 +16,15 @@
   The module is installed by `pip` method:
 
   ```
-  pip install gplt -i https://pypi.org/simple
+  pip install numpy matplotlib colorama pandas openpyxl
+  pip install gplt -i https://test.pypi.org/simple
   ```
 
   Please **ALWAYS** install Latest version.
 
   Update this module if you have installed:
   ```
-  pip install gplt --upgrade -i https://pypi.org/simple
+  pip install gplt --upgrade -i https://test.pypi.org/simple
   ```
 
 # Usage
