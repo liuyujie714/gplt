@@ -24,7 +24,7 @@ setup(
     author='Yujie Liu',
     author_email='',
     python_requires='>=3.8',
-    install_requires=['typing_extensions', 'numpy', 'matplotlib', 'colorama', 'pandas'],
+    install_requires=['typing_extensions', 'numpy', 'matplotlib', 'colorama', 'pandas', 'openpyxl'],
     exclude=['setup.py'],
     packages=find_packages(include=['gplt', 'gplt.*']),
     entry_points={"console_scripts": ["gplt = gplt.gplt:gplt_command"]},

@@ -8,6 +8,8 @@
 * Requirements
 
   * `Python >= 3.8`
+  * `numpy`
+  * `pandas` and `openpyxl`
 
 * Install
 
