@@ -26,7 +26,8 @@ def parser_opt():
 
     gp2 = args.add_argument_group('Options to specify output files:')
     gp2.add_argument('-o', '--outfile', type=str, default=None, 
-                      help='Save figure to file, such as png, jpg with 600 dpi, or pdf')
+                      help='Save figure to file, such as png, jpg with 600 dpi, or pdf. '
+                      'Save data to excel xlsx for xvg')
     
     gp3 = args.add_argument_group('Other options:')
     gp3.add_argument('-title', '--title', type=str, default=None, 
@@ -48,9 +49,15 @@ def parser_opt():
     gp3.add_argument('-yaxis', '--yaxis', type=str, default=None,
                       help='Set y axis label')
     gp3.add_argument('-ux', '--unitx', type=str, default=None, 
-                     help='The unit for x axis')
+                     help='The unit for x axis, auto convert if avaliable')
     gp3.add_argument('-uy', '--unity', type=str, default=None, 
-                     help='The unit for y axis')
+                     help='The unit for y axis, auto convert if avaliable')
+    gp3.add_argument('-sx', '--scalex', type=float, default=None, 
+                     help='The scale fractor for x axis')
+    gp3.add_argument('-sy', '--scaley', type=float, default=None, 
+                     help='The scale fractor for y axis')
+    gp3.add_argument('-sz', '--scalez', type=float, default=None, 
+                     help='The scale fractor for z axis')
     gp3.add_argument('-style', '--mplstyle', type=str, default=None, 
                      help='The matplotlib style file for plotting')
     gp3.add_argument('-u', '--using', type=str, default=None, 
@@ -73,7 +80,7 @@ def gplt_command():
     try:
         func_call[suffix](opts.file, kwargs=vars(opts))
     except Exception as ex:
-        g_log.error(f'error msg: {ex}')
+        raise ex
     g_log.info('GPLT reminds you: ' + CoolStuff().print_choice())
 
 if __name__ == '__main__':

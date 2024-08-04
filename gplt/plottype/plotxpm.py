@@ -31,31 +31,39 @@ class PlotXPM(XPMIO):
 
         """ @brief Set up figure display, such label, title, legend, ... """
         # adjust unit of axis
-        for key, val in self.kwargs.items():
-            if val is None:
-                continue
-            if key=='unitx':
-                ret = get_unit_from_str(self.xaxis)
-                if ret is not None:
-                    frac = get_unit_frac(ret, val)
-                    # scale x data
-                    self.xticks *= frac
-                    # set new xlabel use unit val
-                    self.xaxis = self.xaxis.replace(ret, val)
-            elif key=='unity':
-                ret = get_unit_from_str(self.yaxis)
-                if ret is not None:
-                    frac = get_unit_frac(ret, val)
-                    # scale y data
-                    self.yticks *= frac
-                    # set new xlabel use unit val
-                    self.yaxis = self.yaxis.replace(ret, val)
+        unitx = self.kwargs['unitx']
+        if unitx is not None:
+            ret = get_unit_from_str(self.xaxis)
+            if ret is not None:
+                frac = get_unit_frac(ret, unitx)
+                # scale x data
+                self.xticks *= frac
+                # set new xlabel use unit val
+                self.xaxis = self.xaxis.replace(ret, unitx)
+        unity = self.kwargs['unity']
+        if unity is not None:
+            ret = get_unit_from_str(self.yaxis)
+            if ret is not None:
+                frac = get_unit_frac(ret, unity)
+                # scale y data
+                self.yticks *= frac
+                # set new xlabel use unit val
+                self.yaxis = self.yaxis.replace(ret, unity)
 
+        # scale axis
+        if self.kwargs['scalex'] is not None:
+            self.xticks *= self.kwargs['scalex']
+        if self.kwargs['scaley'] is not None:
+            self.yticks *= self.kwargs['scaley']
+        if self.kwargs['scalez'] is not None:
+            self.data *= self.kwargs['scalez']
+
+        # only set label
         keywords = ['legend', 'xaxis', 'yaxis', 'xlim', 'ylim', 'title', 'mplstyle', 
                     'xprec', 'yprec', 'zprec']
-        for key, val in self.kwargs.items():
-            if val != None and key in keywords:
-                setattr(self, key, val)
+        for key in keywords:
+            if self.kwargs[key] is not None:
+                setattr(self, key, self.kwargs[key]) # self.key = val
 
     def plot(self):
         """ @brief Plot XPM figure """
