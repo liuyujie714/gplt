@@ -9,7 +9,7 @@ ytick.left:         True
 ytick.direction:    in
 xtick.bottom:       True
 xtick.direction:    in
-lines.linewidth:    2
+lines.linewidth:    1.5
 legend.fontsize:    12
 legend.loc:         best
 font.family:        Times New Roman
@@ -18,4 +18,5 @@ image.cmap:         coolwarm
 image.aspect:       auto # for fitting into axes
 #figure.dpi:         300
 savefig.dpi:        600
-axes.prop_cycle:    cycler('color', ['38A7D0', 'F67088', '66C2A5', 'FC8D62', '8DA0CB', 'E78AC3', 'A6D854', 'FFD92F', 'E5C494', 'B3B3B3', '66C2A5', 'FC8D62'])
+# colors, refer to https://jerkwin.github.io/2018/08/20/%E7%A7%91%E6%8A%80%E7%BB%98%E5%9B%BE%E7%9A%84%E8%B0%83%E8%89%B2%E6%9D%BF/
+axes.prop_cycle:    cycler('color', ['000000', 'FF0000', '0000FF', 'FF00FF', '008000', '000080', '8000FF', '800080', '800000', '808000', '2B63A2', '1E9696', '9B641A', '10C73E', '89247A', '2DC5CC', '3F4198', '93AC2B', '808080', '966464', '649664', '2BA3CA', '326496'])
