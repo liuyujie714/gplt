@@ -11,10 +11,3 @@ Welcome to gplt's documentation!
    :caption: Contents:
 
    gplt.md
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
