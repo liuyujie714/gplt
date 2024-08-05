@@ -12,13 +12,22 @@ class XmgrDecode():
     def _decoding_str(s):
         # match and replace string to python chars
         map = {
-            r'\\s(.*?)\\N' : '_',
-            r'\\S(.*?)\\N' : '^'
+            r'\\s(.*?)\\N'   : '_',
+            r'\\S(.*?)\\N'   : '^',
+            r'\\x([a-z])\\f{}' : {'x':'\\xi', 'a':'\\alpha', 'c':'\\chi',
+                                'd':'\\delta', 'e':'\\epsilon', 'f':'\\psi',
+                                'g':'\\gamma', 'h':'\\eta', 'j':'\\phi', 'k':'\\kappa'}
         }
         for pattern, rep in map.items():
             match = re.search(pattern, s)
             if match:
-                return (s[:match.start()]+f'${rep}'+'{'+match.group(1)+'}$'+s[match.end():])
+                if isinstance(rep, dict):
+                    ch = match.group(1)
+                    if ch in rep:
+                        return s[:match.start()]+f'$'+rep[ch]+'$'+s[match.end():]
+                    else:
+                        return s
+                return s[:match.start()]+f'${rep}'+'{'+match.group(1)+'}$'+s[match.end():]
         return s
 
     def decoding(self):

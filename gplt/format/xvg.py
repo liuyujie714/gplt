@@ -18,9 +18,9 @@ class XVGIO:
 
     def read(self) -> np.ndarray:
         """ @brief Read xvg data and return multi-columns data in array """
+        check_file_exist(self.fname)
         self._read_header()
         data = []
-        check_file_exist(self.fname)
         g_log.info(f'Loading file: {self.fname}')
         with open(self.fname, 'r') as f:
             lines = f.readlines()
