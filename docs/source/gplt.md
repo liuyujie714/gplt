@@ -93,9 +93,10 @@ Other options::
 gplt -f rdf.xvg
 gplt -f rdf.xvg -ux angstrom
 ```
-
-![rdf.png](./_static/rdf.png)
-![rdf.png](./_static/rdf2.png)
+<div style="display: flex; justify-content: space-between;">
+  <img src="./_static/rdf.png"  alt="rdf"  width="300"/>
+  <img src="./_static/rdf2.png" alt="rdf2" width="300"/>
+</div>
 
 ## Plot xpm
 ```bash
@@ -116,7 +117,7 @@ This command will generate a xxx.xpm file, then you can plot it by `gplt -f dens
 
 ### dssp.dat for gmx dssp [gmx >= 2023]
 ```bash
-gplt -f dssp.dat && gplt -f dssp.xpm && gplt -f scount.xvg
+gplt -f dssp.dat && gplt -f dssp.xpm -xprec 0 -yprec 0 -o dssp.png && gplt -f scount.xvg -xprec 0 -yprec 0 -o scount.png
 ```
 <img src="./_static/dssp.png"     alt="dssp" width="400"/>
 <img src="./_static/scount.png"   alt="scount" width="400"/>
