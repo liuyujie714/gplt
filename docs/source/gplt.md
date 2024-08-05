@@ -93,10 +93,9 @@ Other options::
 gplt -f rdf.xvg
 gplt -f rdf.xvg -ux angstrom
 ```
-<div style="display: flex; justify-content: space-between;">
-  <img src="./_static/rdf.png"  alt="rdf" width="300"/>
-  <img src="./_static/rdf2.png" alt="rdf2" width="300"/>
-</div>
+
+![rdf.png](./_static/rdf.png)
+![rdf.png](./_static/rdf2.png)
 
 ## Plot xpm
 ```bash
