@@ -34,8 +34,8 @@ def get_unit_from_str(ss:str):
             return match.group(1)
     return None
 
-def _get_fractor(src:str, desc:str, dic:dict):
-    """ @breif return fractor if can convert, else return None """
+def _get_factor(src:str, desc:str, dic:dict):
+    """ @breif return factor if can convert, else return None """
     s = src.lower()
     # unit Angstrom
     if s=='a':
@@ -56,11 +56,11 @@ def _get_fractor(src:str, desc:str, dic:dict):
         return None
 
 def get_unit_frac(src:str, desc:str):
-    """ @brief get unit fractor from src convert to desc """
-    ret = _get_fractor(src, desc, Time_Units)
+    """ @brief get unit factor from src convert to desc """
+    ret = _get_factor(src, desc, Time_Units)
     if ret is not None:
         return ret
-    ret = _get_fractor(src, desc, Length_Units)
+    ret = _get_factor(src, desc, Length_Units)
     if ret is not None:
         return ret
     raise ValueError(f"Can not convert between '{src}' and '{desc}'")
