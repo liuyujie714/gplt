@@ -146,11 +146,16 @@ class PlotMultiXVG():
         for idx, obj in enumerate(objs):
             if len(grps) > 0:
                 for g in range(len(grps[idx])):
+                    if grps[idx][g]-1 >= obj.data.shape[1]:
+                        g_log.error(f'Out of index range for -u option, must between [1, {obj.data.shape[1]}] ')
                     plt.plot(obj.data[:, xcol], obj.data[:, grps[idx][g]-1])
+                    if obj._has_legend() and (grps[idx][g]-2 < len(obj.legend)):
+                        legs.append(obj.legend[grps[idx][g]-2])
             else:
                 plt.plot(obj.data[:, 0], obj.data[:, 1:])
+
             # merge legends
-            if (self.kwargs['legend'] is None) and len(self.fnames)>1:
+            if (self.kwargs['legend'] is None) and len(self.fnames) > 1 and len(grps) == 0:
                 legs.extend([f'{x} of {self.fnames[idx]}' for x in obj.legend])
             else:
                 legs = obj.legend
