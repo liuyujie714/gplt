@@ -11,10 +11,9 @@ Please refer to : https://gplt.readthedocs.io/en/latest/gplt.html#install
 ![scount.xvg](./docs/source/_static/scount.png)
 ![rdf.xvg](./docs/source/_static/rdf2.png)
 ![ss.xpm](./docs/source/_static/ss.png)
+![2D_charge_density.xpm](./docs/source/_static/2D_charge_density.png)
 ![densmap.xpm](./docs/source/_static/densmap.png)
 ![FES.xpm](./docs/source/_static/FES.png)
-
-
 
 # Cite
 If `gplt` is utilized in your work, please cite as follows in main text:
