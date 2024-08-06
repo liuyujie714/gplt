@@ -74,11 +74,11 @@ Other options::
   -uy UNITY, --unity UNITY
                         The unit for y axis, auto convert if avaliable
   -sx SCALEX, --scalex SCALEX
-                        The scale fractor for x axis
+                        The scale factor for x axis
   -sy SCALEY, --scaley SCALEY
-                        The scale fractor for y axis
+                        The scale factor for y axis
   -sz SCALEZ, --scalez SCALEZ
-                        The scale fractor for z axis
+                        The scale factor for z axis
   -style MPLSTYLE, --mplstyle MPLSTYLE
                         The matplotlib style file for plotting
   -u USING, --using USING

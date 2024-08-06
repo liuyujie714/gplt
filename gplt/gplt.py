@@ -53,11 +53,11 @@ def parser_opt():
     gp3.add_argument('-uy', '--unity', type=str, default=None, 
                      help='The unit for y axis, auto convert if avaliable')
     gp3.add_argument('-sx', '--scalex', type=float, default=None, 
-                     help='The scale fractor for x axis')
+                     help='The scale factor for x axis')
     gp3.add_argument('-sy', '--scaley', type=float, default=None, 
-                     help='The scale fractor for y axis')
+                     help='The scale factor for y axis')
     gp3.add_argument('-sz', '--scalez', type=float, default=None, 
-                     help='The scale fractor for z axis')
+                     help='The scale factor for z axis')
     gp3.add_argument('-style', '--mplstyle', type=str, default=None, 
                      help='The matplotlib style file for plotting')
     gp3.add_argument('-u', '--using', type=str, default=None, 
