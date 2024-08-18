@@ -13,6 +13,7 @@ class XPMIO:
         self.title = ''
         self.xaxis = ''
         self.yaxis = ''
+        self.zaxis = '' # only used when 3D plot
         self.type = 'Continuous' # Continuous or Discrete 
         self.ncode = 1 # 1 or 2 chars of the level
         self.value_list = []

@@ -48,6 +48,8 @@ def parser_opt():
                       help='Set X axis label')
     gp3.add_argument('-yaxis', '--yaxis', type=str, default=None,
                       help='Set y axis label')
+    gp3.add_argument('-zaxis', '--zaxis', type=str, default=None,
+                      help='Set z axis label if plot 3D figure')
     gp3.add_argument('-ux', '--unitx', type=str, default=None, 
                      help='The unit for x axis, auto convert if avaliable')
     gp3.add_argument('-uy', '--unity', type=str, default=None, 
@@ -58,7 +60,9 @@ def parser_opt():
                      help='The scale factor for y axis')
     gp3.add_argument('-sz', '--scalez', type=float, default=None, 
                      help='The scale factor for z axis')
-    gp3.add_argument('-style', '--mplstyle', type=str, default=None, 
+    gp3.add_argument('-d3', '--d3', action='store_true', 
+                     help='If plot 3D figure')
+    gp3.add_argument('-style', '--mplstyle', type=str, default=None,
                      help='The matplotlib style file for plotting')
     gp3.add_argument('-u', '--using', type=str, default=None, 
                      help='Use the selection columns to plot. 1-3 represents 1,2,3 column, 1,2 represent 1 and 2 column. ' \

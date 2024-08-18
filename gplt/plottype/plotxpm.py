@@ -21,6 +21,7 @@ class PlotXPM(XPMIO):
         self.yprec = None
         self.zprec = None
         self.mplstyle = None
+        self.d3 = False # if show 3D surface, such as FEL.xpm
 
         self.read() # read data
         self._set_display()   
@@ -59,8 +60,8 @@ class PlotXPM(XPMIO):
             self.data *= self.kwargs['scalez']
 
         # only set label
-        keywords = ['legend', 'xaxis', 'yaxis', 'xlim', 'ylim', 'title', 'mplstyle', 
-                    'xprec', 'yprec', 'zprec']
+        keywords = ['legend', 'xaxis', 'yaxis', 'zaxis', 'xlim', 'ylim', 'title', 'mplstyle', 
+                    'xprec', 'yprec', 'zprec', 'd3']
         for key in keywords:
             if self.kwargs[key] is not None:
                 setattr(self, key, self.kwargs[key]) # self.key = val
@@ -76,8 +77,9 @@ class PlotXPM(XPMIO):
         if self.mplstyle is not None:
             plt.style.use(self.mplstyle)
 
-        fig, ax = plt.subplots(figsize=(8,6))
+        fig = plt.figure(figsize=(8,6))
         fig.canvas.manager.set_window_title('XPM Figure')
+        ax = fig.add_subplot(projection='3d' if self.d3 else None)
         X, Y = np.meshgrid(self.xticks, self.yticks)
         Z = np.array(self.data, dtype=float)
 
@@ -95,13 +97,21 @@ class PlotXPM(XPMIO):
             cb.set_ticklabels(self.value_list)
         # continuous data
         else:
-            h = plt.contourf(X, Y, Z, list(self.code2value.values()), cmap="jet")
-            cb = plt.colorbar(h)
+            if self.d3:
+                ax.plot_surface(X, Y, Z, cmap='jet')
+                if self.zaxis == '' and self._has_legend():
+                    self.zaxis = self.legend[0]
+                ax.set_zlabel(self.zaxis)
+                h = plt.contourf(X, Y, Z, list(self.code2value.values()), offset=np.min(self.data), cmap="jet")
+                cb = plt.colorbar(h, location='left', shrink=0.6)
+            else:
+                h = plt.contourf(X, Y, Z, list(self.code2value.values()), cmap="jet")
+                cb = plt.colorbar(h)
         if self._has_legend(): 
             cb.set_label(self.legend[0])
 
-        ax.set_xlabel(self.xaxis)
-        ax.set_ylabel(self.yaxis)
+        ax.set_xlabel(self.xaxis, labelpad=10 if self.d3 else None)
+        ax.set_ylabel(self.yaxis, labelpad=10 if self.d3 else None)
         ax.set_title(self.title)
         # set range
         if self.xlim is not None:
