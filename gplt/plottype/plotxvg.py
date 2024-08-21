@@ -153,12 +153,11 @@ class PlotMultiXVG():
                         legs.append(obj.legend[grps[idx][g]-2])
             else:
                 plt.plot(obj.data[:, 0], obj.data[:, 1:])
+                legs = obj.legend
 
             # merge legends
             if (self.kwargs['legend'] is None) and len(self.fnames) > 1 and len(grps) == 0:
                 legs.extend([f'{x} of {self.fnames[idx]}' for x in obj.legend])
-            else:
-                legs = obj.legend
 
         # set show
         ax.legend(legs, frameon=False)
