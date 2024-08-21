@@ -14,9 +14,10 @@ class XmgrDecode():
         map = {
             r'\\s(.*?)\\N'   : '_',
             r'\\S(.*?)\\N'   : '^',
-            r'\\x([a-z])\\f{}' : {'x':'\\xi', 'a':'\\alpha', 'c':'\\chi',
-                                'd':'\\delta', 'e':'\\epsilon', 'f':'\\psi',
-                                'g':'\\gamma', 'h':'\\eta', 'j':'\\phi', 'k':'\\kappa'}
+            r'\\x([a-z])\\f{}' : {'x':'\\xi', 'a':'\\alpha', 'q':'\\theta', 'c':'\\chi',
+                                'd':'\\delta', 'e':'\\epsilon', 'y':'\\psi',
+                                'g':'\\gamma', 'h':'\\eta', 'f':'\\phi', 'k':'\\kappa',
+                                'l':'\\lambda', 'r':'\\rho', 'm':'\\mu'}
         }
         for pattern, rep in map.items():
             match = re.search(pattern, s)
