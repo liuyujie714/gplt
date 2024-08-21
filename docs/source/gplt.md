@@ -79,12 +79,13 @@ Other options::
                         The scale factor for y axis
   -sz SCALEZ, --scalez SCALEZ
                         The scale factor for z axis
+  -d3, --d3             If plot 3D figure
   -style MPLSTYLE, --mplstyle MPLSTYLE
                         The matplotlib style file for plotting
   -u USING, --using USING
-                        Use the selection columns to plot. 1-3 represents 1,2,3 column, 1,2
-                        represent 1 and 2 column. 1,2:2 represents 1 and 2 column for file 1, 2
-                        column for file2, ...(: represents multi-files)
+                        Use the selection columns to plot. 1-3 represents 1,2,3 column,
+                        1,2 represent 1 and 2 column. 1,2:2 represents 1 and 2 column
+                        for file 1, 2 column for file2, ...(: represents multi-files)
 ```
 
 ## Plot xvg
