@@ -8,6 +8,7 @@ from utils.logger import g_log
 import matplotlib.pyplot as plt
 import matplotlib.colors as set_colors
 from matplotlib.ticker import FormatStrFormatter
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 import numpy as np
 
 class PlotXPM(XPMIO):
@@ -22,6 +23,7 @@ class PlotXPM(XPMIO):
         self.zprec = None
         self.mplstyle = None
         self.d3 = False # if show 3D surface, such as FEL.xpm
+        self.aspect = None  # aspect ratio
 
         self.read() # read data
         self._set_display()   
@@ -61,7 +63,7 @@ class PlotXPM(XPMIO):
 
         # only set label
         keywords = ['legend', 'xaxis', 'yaxis', 'zaxis', 'xlim', 'ylim', 'title', 'mplstyle', 
-                    'xprec', 'yprec', 'zprec', 'd3']
+                    'xprec', 'yprec', 'zprec', 'd3', 'aspect']
         for key in keywords:
             if self.kwargs[key] is not None:
                 setattr(self, key, self.kwargs[key]) # self.key = val
@@ -80,9 +82,11 @@ class PlotXPM(XPMIO):
         fig = plt.figure(figsize=(8,6))
         fig.canvas.manager.set_window_title('XPM Figure')
         ax = fig.add_subplot(projection='3d' if self.d3 else None)
+        if self.aspect is not None:
+            ax.set_aspect(self.aspect)
         X, Y = np.meshgrid(self.xticks, self.yticks)
         Z = np.array(self.data, dtype=float)
-
+        
         # hb, ss xpm with Discrete data
         if self.type == 'Discrete':
             # fix plot bug, we should use pcolormesh
@@ -106,7 +110,9 @@ class PlotXPM(XPMIO):
                 cb = plt.colorbar(h, location='left', shrink=0.6)
             else:
                 h = plt.contourf(X, Y, Z, list(self.code2value.values()), cmap="jet")
-                cb = plt.colorbar(h)
+                divider = make_axes_locatable(ax)
+                cax = divider.append_axes("right", size="5%", pad=0.1)
+                cb = plt.colorbar(h, cax=cax)
         if self._has_legend(): 
             cb.set_label(self.legend[0])
 
