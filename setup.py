@@ -4,7 +4,7 @@
 from setuptools import setup, find_packages
 
 # Always update program version
-__version__ = '0.1.12.8'
+__version__ = '0.1.12.9'
 
 # Description
 long_doc = ""
