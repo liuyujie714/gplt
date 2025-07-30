@@ -68,7 +68,7 @@ def parser_opt():
                      help='Use the selection columns to plot. 1-3 represents 1,2,3 column, 1,2 represent 1 and 2 column. ' \
                      '1,2:2 represents 1 and 2 column for file 1, 2 column for file2, ...(: represents multi-files)')
     gp3.add_argument('-aspect', '--aspect', type=str, default=None, choices=['equal', 'auto'],
-                     help='Set aspect ratio of axis')
+                     help='Set aspect ratio of axis for XPM')
 
     if len(sys.argv) < 3:
         args.print_help()

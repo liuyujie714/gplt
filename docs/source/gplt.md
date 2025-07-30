@@ -91,7 +91,7 @@ Other options::
                         represents 1 and 2 column for file 1, 2 column for
                         file2, ...(: represents multi-files)
   -aspect {equal,auto}, --aspect {equal,auto}
-                        Set aspect ratio of axis
+                        Set aspect ratio of axis for XPM
 
 ```
 
