@@ -123,7 +123,7 @@ gplt -f densmap.dat && gplt -f densmap.xpm -aspect equal
 ```
 This command will generate a xxx.xpm file, then you can plot it by `gplt -f densmap.xpm`
 
-<img src="C:\Users\liuyujie714\AppData\Roaming\Typora\typora-user-images\image-20250730104824434.png" alt="image-20250730104824434" style="zoom: 33%;" />
+<img src="./_static/densmap.png" alt="image-20250730104824434" style="zoom: 33%;" />
 
 ### dssp.dat for gmx dssp [gmx >= 2023]
 
