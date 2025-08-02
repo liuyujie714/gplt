@@ -99,6 +99,9 @@ class PlotXPM(XPMIO):
             cb = plt.colorbar(h, orientation='horizontal', fraction=fraction)
             cb.set_ticks(np.array(boundaries[:-1]) + 0.5)
             cb.set_ticklabels(self.value_list)
+            # replace yticks by yticks_str for hbmap.xpm
+            if hasattr(self, 'yticks_str'):
+                ax.set_yticks(self.yticks, self.yticks_str)
         # continuous data
         else:
             if self.d3:
@@ -135,6 +138,7 @@ class PlotXPM(XPMIO):
             cb.update_ticks()
 
         # save png
+        plt.tight_layout()
         fout = self.kwargs['outfile']
         if fout is not None:
             g_log.info(f'Write {fout}')

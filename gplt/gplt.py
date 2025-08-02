@@ -14,6 +14,7 @@ from utils.coolstuff import CoolStuff
 from utils.logger import g_log
 from plottype.plotxvg import PlotMultiXVG
 from plottype.plotxpm import PlotMultiXPM, MultiDAT2XPM
+from plottype.plothbres import PlotHBResidue
 
 def parser_opt():
     args = argparse.ArgumentParser(
@@ -81,7 +82,8 @@ def gplt_command():
     func_call = {
         'xvg' : PlotMultiXVG,
         'xpm' : PlotMultiXPM,
-        'dat' : MultiDAT2XPM
+        'dat' : MultiDAT2XPM,
+        'ndx' : PlotHBResidue
     }
     try:
         func_call[suffix](opts.file, kwargs=vars(opts))

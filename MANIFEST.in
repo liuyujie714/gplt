@@ -3,5 +3,6 @@ recursive-exclude docs *
 recursive-exclude gplt/test/xpm * 
 recursive-exclude gplt/test/xvg * 
 recursive-exclude gplt/test/dat * 
+recursive-exclude gplt/test/hbres * 
 global-exclude *.py[co]
 include LICENSE

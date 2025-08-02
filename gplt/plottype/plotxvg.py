@@ -178,6 +178,7 @@ class PlotMultiXVG():
             ax.yaxis.set_major_formatter(FormatStrFormatter(f'%.{objs[0].yprec}f'))
 
         # save png or plot
+        plt.tight_layout()
         fout = self.kwargs['outfile']
         if fout is not None:
             g_log.info(f'Write {fout}')
