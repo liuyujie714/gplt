@@ -59,9 +59,9 @@ gplt -f rdf1.xvg rdf2.xvg -legend lab1 lab2
 
 ## Plot xpm
 
-| gplt -f gibbs.xpm                      | gplt -f ss.xpm                         |
-| -------------------------------------- | -------------------------------------- |
-| <img src="_static/FES.png" alt="FES"/> | <img src="_static/ss.png"  alt="ss" /> |
+| gplt -f gibbs.xpm         | gplt -f ss.xpm                         |
+| ------------------------- | -------------------------------------- |
+| ![gibbs](_static/FES.png) | <img src="_static/ss.png"  alt="ss" /> |
 
 
 
