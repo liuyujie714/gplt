@@ -43,9 +43,9 @@ gplt -h
 
 ## Plot xvg
 
-| gplt -f rdf.xvg                           | gplt -f rdf.xvg -ux angstrom                |
-| ----------------------------------------- | ------------------------------------------- |
-| <img src="./_static/rdf.png"  alt="rdf" > | <img src="./_static/rdf2.png" alt="rdf2" /> |
+| gplt -f rdf.xvg                         | gplt -f rdf.xvg -ux angstrom              |
+| --------------------------------------- | ----------------------------------------- |
+| <img src="_static/rdf.png"  alt="rdf" > | <img src="_static/rdf2.png" alt="rdf2" /> |
 
 Of course support multi-figures:
 
@@ -53,15 +53,15 @@ Of course support multi-figures:
 gplt -f rdf1.xvg rdf2.xvg -legend lab1 lab2
 ```
 
-<img src="./_static/rdftwo.png"  alt="FES" width="500"/>
+<img src="_static/rdftwo.png"  alt="FES" width="500"/>
 
 
 
 ## Plot xpm
 
-| gplt -f gibbs.xpm                        | gplt -f ss.xpm                           |
-| ---------------------------------------- | ---------------------------------------- |
-| <img src="./_static/FES.png" alt="FES"/> | <img src="./_static/ss.png"  alt="ss" /> |
+| gplt -f gibbs.xpm                      | gplt -f ss.xpm                         |
+| -------------------------------------- | -------------------------------------- |
+| <img src="_static/FES.png" alt="FES"/> | <img src="_static/ss.png"  alt="ss" /> |
 
 
 
@@ -77,7 +77,7 @@ The ndx file name must be placed before the gro/xpm file
 gplt -f hbond.ndx 1EBZ.gro hbmap.xpm -yaxis 'Hbonds Paris' -title ''
 ```
 
-<img src="./_static/hbpairs.png" alt="hbpairs" width="600"/>
+<img src="_static/hbpairs.png" alt="hbpairs" width="600"/>
 
 ````{note}
 You can change some plotting style by [Matplotlib style](https://matplotlib.org/stable/tutorials/introductory/customizing.html#the-matplotlibrc-file). Write a plain text file `style.mplstyle`:
@@ -117,7 +117,7 @@ This command will generate a xxx.xpm file, then you can plot it by `gplt -f dens
 
 `-aspect equal`: Use same scaling from data to plot units for x and y
 
-<img src="./_static/densmap.png" alt="image-20250730104824434" style="zoom: 33%;" />
+<img src="_static/densmap.png" alt="image-20250730104824434" style="zoom: 33%;" />
 
 2. `dssp.dat` from `gmx dssp` (gmx >= 2023)
 
@@ -131,7 +131,7 @@ This command will generate a xxx.xpm file, then you can plot it by `gplt -f dens
 
 | gplt -f dssp.xpm -xprec 0 -yprec 0 -o dssp.png | gplt -f scount.xvg -xprec 0 -yprec 0 -o scount.png |
 | ---------------------------------------------- | -------------------------------------------------- |
-| <img src="./_static/dssp.png"  alt="dssp"/>    | <img src="./_static/scount.png"   alt="scount" />  |
+| <img src="_static/dssp.png"  alt="dssp"/>      | <img src="_static/scount.png"   alt="scount" />    |
 
 
 
