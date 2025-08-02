@@ -31,7 +31,7 @@
 Use `-h` to show available options:
 
 ```bash
-glpt -h
+gplt -h
 ```
 
 
