@@ -174,7 +174,7 @@ This command will generate a `densmap.xpm` file, then you can plot it.
     x and y of grid point must be integer.
 
     ```
-    gplt -f xyz.dat && gplt -f xyz.xpm
+    gplt -f xyz.dat && gplt -f xyz.xpm -aspect equal
     ```
 
     <img src="./_static/xyz.png"   alt="xyz" width="400"/>
