@@ -3,6 +3,14 @@
 `gplt` is a very convenient python tool for plotting gromacs output file, such as `.xvg`, `.xpm` or convert `.dat` to `.xpm` for visualization. This tool is similar to [DuIvyTools](https://github.com/CharlesHahn/DuIvyTools), and these features could potentially be part of DuIvyTools. However, if time permits, I hope that it can become more powerful than DuIvyTools in the future.
 
 
+# Cite
+
+```{attention}
+If `gplt` is utilized in your work, please **MUST** cite as follows in main text:
+
+> Yujie Liu, gplt. Zenodo. https://doi.org/10.5281/zenodo.13208831
+```
+
 
 # Installation
 
@@ -149,10 +157,24 @@ This command will generate a `densmap.xpm` file, then you can plot it.
 <img src="./_static/dssp.png"     alt="dssp" width="400"/>
 <img src="./_static/scount.png"   alt="scount" width="400"/>
 
+3. `.dat` with xyz columns
 
+    `gplt` also supports the file with three columns `xbin ybin zvalue`, such as:
+    ```
+    1 14 0.0771830985915493
+    4 14 0.0771830985915493
+    7 14 0.0876056338028169
+    4 16 0.03492957746478873
+    6 13 0.011830985915492958
+    9 14 0.07887323943661971
+    16 14 0.08647887323943662
+    12 17 0.05718309859154929
+    13 14 0.07549295774647888
+    ```
+    x and y of grid point must be integer.
 
-# Cite
+    ```
+    gplt -f xyz.dat && gplt -f xyz.xpm
+    ```
 
-If `gplt` is utilized in your work, please cite as follows in main text:
-
-> Yujie Liu, gplt (v0.1.12). Zenodo. https://doi.org/10.5281/zenodo.13208831
+    <img src="./_static/xyz.png"   alt="xyz" width="400"/>

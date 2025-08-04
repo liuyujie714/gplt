@@ -8,15 +8,15 @@
 Please refer to : https://gplt.readthedocs.io/en/latest/gplt.html#install
 
 # Gallery
-![scount.xvg](./docs/source/images/scount.png)
-![rdf.xvg](./docs/source/images/rdf2.png)
-![ss.xpm](./docs/source/images/ss.png)
-![2D_charge_density.xpm](./docs/source/images/2D_charge_density.png)
-![densmap.xpm](./docs/source/images/densmap.png)
-![FES.xpm](./docs/source/images/FES.png)
+![scount.xvg](./docs/source/_static/scount.png)
+![rdf.xvg](./docs/source/_static/rdf2.png)
+![ss.xpm](./docs/source/_static/ss.png)
+![2D_charge_density.xpm](./docs/source/_static/2D_charge_density.png)
+![densmap.xpm](./docs/source/_static/densmap.png)
+![FES.xpm](./docs/source/_static/FES.png)
 
 # Cite
 If `gplt` is utilized in your work, please cite as follows in main text:
 
-> Yujie Liu, gplt (v0.1.12). Zenodo. https://doi.org/10.5281/zenodo.13208831
+> Yujie Liu, gplt. Zenodo. https://doi.org/10.5281/zenodo.13208831
 
