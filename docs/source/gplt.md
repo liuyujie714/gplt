@@ -8,7 +8,7 @@
 ```{attention}
 If `gplt` is utilized in your work, please **MUST** cite as follows in main text:
 
-> Yujie Liu, gplt. Zenodo. https://doi.org/10.5281/zenodo.13208831
+> Yujie Liu, gplt. Zenodo. [https://doi.org/10.5281/zenodo.13208831](https://doi.org/10.5281/zenodo.13208831)
 ```
 
 
