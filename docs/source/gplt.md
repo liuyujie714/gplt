@@ -17,7 +17,7 @@ If `gplt` is utilized in your work, please **MUST** cite as follows in main text
 * Requirements
 
   * `Python >= 3.8`
-  * `numpy`, `pandas` and `openpyxl`
+  * `numpy`, `matplotlib`, `openpyxl`, etc.
   
 * Install
 
